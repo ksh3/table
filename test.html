@@ -1,41 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Test of Table</title>
 
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <title>Test of Table</title>
 
-        body, html {
-            margin: 0;
-        }
+        <style>
+            body,
+            html {
+                margin: 0;
+            }
 
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-        .block {
-            width: 800px;
-            margin-top: 10px;
-        }
+            .block {
+                width: 800px;
+                margin-top: 10px;
+            }
+        </style>
 
-    </style>
+    </head>
 
-</head>
-<body>
+    <body>
 
-<div class="block"></div>
+        <div class="block"></div>
 
-<script src="dist/bundle.js"></script>
-<script>
-    const table = new Table({data: {}, config: {}, api: {}});
-    const block = document.querySelector(".block");
+        <script src="dist/bundle.js"></script>
+        <script>
+            const table = new Table({ data: { content: { 0: ['a'], 1: ['b'] } }, config: {}, api: {} });
+            const block = document.querySelector(".block");
 
-    block.appendChild(table.render());
+            block.appendChild(table.render());
 
-</script>
+        </script>
 
-</body>
+    </body>
+
 </html>

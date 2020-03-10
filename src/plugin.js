@@ -1,8 +1,8 @@
-const TableConstructor = require('./tableConstructor').TableConstructor;
-const svgIcon = require('./img/toolboxIcon.svg');
+const TableConstructor = require("./tableConstructor").TableConstructor;
+const svgIcon = require("./img/toolboxIcon.svg");
 
 const CSS = {
-  input: 'tc-table__inp'
+  input: "tc-table__inp"
 };
 
 /**
@@ -30,7 +30,7 @@ class Table {
   static get toolbox() {
     return {
       icon: svgIcon,
-      title: 'Table'
+      title: "Table"
     };
   }
 
@@ -40,9 +40,16 @@ class Table {
    * @param {object} config - user config for Tool
    * @param {object} api - Editor.js API
    */
-  constructor({data, config, api}) {
+  constructor({ data, config, api }) {
+    if (data.hasOwnProperty("content")) {
+      let arr = [];
+      for (let index in data.content) {
+        arr.push(data.content[index]);
+      }
+      data.content = arr;
+    }
+    console.log(data);
     this.api = api;
-
     this._tableConstructor = new TableConstructor(data, config, api);
   }
 
@@ -56,19 +63,32 @@ class Table {
   }
 
   /**
+   * Firestore compatible
+   * @returns {{<Array>}} - saved data
+   * @public
+   */
+  formatNestedArray(arr) {
+    let obj = {};
+    for (let i = 0; i < arr.length; i++) {
+      obj[i] = arr[i];
+    }
+    return obj;
+  }
+
+  /**
    * Extract Tool's data from the view
    * @returns {TableData} - saved data
    * @public
    */
   save(toolsContent) {
-    const table = toolsContent.querySelector('table');
+    const table = toolsContent.querySelector("table");
     const data = [];
     const rows = table.rows;
 
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       const cols = Array.from(row.cells);
-      const inputs = cols.map(cell => cell.querySelector('.' + CSS.input));
+      const inputs = cols.map(cell => cell.querySelector("." + CSS.input));
       const isWorthless = inputs.every(this._isEmpty);
 
       if (isWorthless) {
@@ -78,7 +98,7 @@ class Table {
     }
 
     return {
-      content: data
+      content: this.formatNestedArray(data)
     };
   }
 
